@@ -6,17 +6,13 @@ create table if not exists users (
 	phone varchar(45) not null
 );
 
-create table if not exists baskets (
-    id serial not null primary key,
-	user_id INT REFERENCES users(id),
-	val INT not null check (val > 0)
-);
-
 create table if not exists products (
     id serial not null primary key,
 	name varchar(45) not null,
 	description varchar(255) not null,
-	price INT not null check (price > 0)
+	price INT not null check (price > 0),
+	type varchar(255) not null,
+	dimension varchar(255) not null
 );
 
 create table if not exists products_photo (
@@ -27,5 +23,9 @@ create table if not exists products_photo (
 
 create table if not exists card_products (
 	product_id INT REFERENCES products(id),
-	basket_id INT REFERENCES baskets(id)
+	user_id INT REFERENCES users(id),
+	address varchar(45) not null,
+	dimension INT not null,
+	limit_of_age INT not null,
+	fragility INT not null
 );
