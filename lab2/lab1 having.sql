@@ -1,5 +1,5 @@
-select products.id, products.name
+select products.name
 from products
-group by products.id
-HAVING AVG(products.price) > 228
+group by products.name
+having products.name != 'SSD' --предложение having фильтрует группы, а не строки, как where
 

@@ -12,7 +12,7 @@ where id in
 		(
 				select price
 				from products
-				where name = 'SSD' and price = '339'
+				where name = 'SSD' and id = 1
 		)
 	)
 )
