@@ -1,5 +1,5 @@
 insert into products_photo(id, url, product_id) 
-select 22222, 'url.ru/22758', products.id
-from products
+select card_products.id, 'url.ru/22758', card_products.product_id
+from card_products
 where products.price = 339
 
