@@ -21,3 +21,6 @@ $$ language plpgsql;
 delete from users_view 
 where username = 'Sonya Hale'
 
+Через триггер реализовать проверку
+если добавляется что-то с нерпавильной ценой, то не добавлять
+

@@ -6,7 +6,7 @@ declare my_cursor cursor
 	where limit_of_age between start_age and stop_age;
 	my_row record;
 begin
-	open my_cursor;
+	open my_cursor; --what
 	loop
 		fetch my_cursor into my_row;
 		exit when not found;

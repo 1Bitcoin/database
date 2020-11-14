@@ -1,5 +1,4 @@
 --select * from products order by id
-
 create or replace procedure update_price (new_price int, id_start int, id_stop int) as
 $$
 begin
