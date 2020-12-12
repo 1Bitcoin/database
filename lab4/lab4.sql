@@ -18,15 +18,15 @@ $$ language plpython3u;
 
 select * from get_product_by_id(228);
 
-У скольких друзей есть друзья
+Общее число друзей у всех пользователей
 
 create or replace function get_count_friends() returns int
 as $$
 information = plpy.execute("select * from users")
 summ = 0
 for person in information:
-	if person['friend_id'] != None:
-		summ += 1;
+	summ += 1 if type(person.get('friend_id')) == int else 0 // Использую метод get словаря person
+
 return summ
 $$ language plpython3u;
 
