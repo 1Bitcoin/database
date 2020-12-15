@@ -11,7 +11,7 @@ def menu():
     print("| 0.  {:<73}".format("Exit") + '|')
     print("| 1.  {:<73}".format("Scalar query") + '|')
     print("| 2.  {:<73}".format("Multijoin query") + '|')
-    print("| 3.  {:<73}".format("CTE and window functions query") + '|')
+    print("| 3.  {:<73}".format("Window functions query") + '|')
     print("| 4.  {:<73}".format("Metadata query") + '|')
     print("| 5.  {:<73}".format("Scalar function call") + '|')
     print("| 6.  {:<73}".format("Multioperator function call") + '|')
