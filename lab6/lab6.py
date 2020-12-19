@@ -1,9 +1,5 @@
 import psycopg2
 
-connection = psycopg2.connect(dbname='BMSTU', user='postgres', 
-                        password='monerocoinyota', host='localhost')
-cursor = connection.cursor()
-
 def menu():
     print('+' + '-' * 78 + '+')
     print("|     {:<73}".format("Menu") + '|')
@@ -24,16 +20,21 @@ def menu():
     option = int(input())
     return option
 
-def normalExit():
+def normalExit(cursor, connection):
     cursor.close()
     connection.close()
     print("Connection closed")
 
-def scalarQuery():
+def scalarQuery(cursor):
     cursor.execute('select MAX(price) from products')
 
+    records = cursor.fetchall()
 
-def multiJoinquery():
+    for item in records:
+        print(item)
+
+
+def multiJoinquery(cursor):
     cursor.execute('select username, name from card_products join users \
                     on card_products.user_id = users.id join products on \
                     products.id = card_products.product_id limit 5')
@@ -43,7 +44,7 @@ def multiJoinquery():
     for item in records:
         print(item)
 
-def windowFunction():
+def windowFunction(cursor):
     
     cursor.execute('select name, price,  min(price) over (partition by name), \
                         max(price) over (partition by name), \
@@ -54,7 +55,7 @@ def windowFunction():
     for item in records:
         print(item)
         
-def metaData():
+def metaData(cursor):
     cursor.execute("select * from pg_database_size('BMSTU')")
     
     records = cursor.fetchall()
@@ -62,7 +63,7 @@ def metaData():
     for item in records:
         print("Size: ", item)
 
-def scalarFuncfromLab():
+def scalarFuncfromLab(cursor):
     cursor.execute("select scalar_func()")
     
     records = cursor.fetchall()
@@ -70,7 +71,7 @@ def scalarFuncfromLab():
     for item in records:
         print(item)
 
-def tableFuncfromLab():
+def tableFuncfromLab(cursor):
     cursor.execute("select table_func(18)")
     
     records = cursor.fetchall()
@@ -78,10 +79,10 @@ def tableFuncfromLab():
     for item in records:
         print(item)
 
-def storedFuncfromLab():
+def storedFuncfromLab(cursor):
     cursor.execute("CALL insert_data(10007, 'https://mysite/photo/23932', 5)")
 
-def systemFunc():
+def systemFunc(cursor):
     cursor.execute("select * from current_database()")
     
     records = cursor.fetchall()
@@ -89,62 +90,89 @@ def systemFunc():
     for item in records:
         print("Name database: ", item)
     
-def createTable():
+def createTable(cursor):
     cursor.execute("create table if not exists scoresProducts ( \
                     id serial not null primary key, \
                     score INT not null, \
                     product_id INT REFERENCES products(id))")
+    print("table create")
 
-def insertInto():
+def insertInto(cursor):
     cursor.execute("INSERT INTO scoresProducts(id, score, product_id) VALUES (1, 4, 228)")
-
     cursor.execute("select * from scoresProducts")
-    
+                    
     records = cursor.fetchall()
 
     for item in records:
         print(item)
     
-
-def manager(choice):
+def manager(choice, cursor, connection):
     if choice == 0:
-        normalExit()
+        normalExit(cursor, connection)
         
     elif choice == 1:
-        scalarQuery()
+        scalarQuery(cursor)
 
     elif choice == 2:
-        multiJoinquery()
+        multiJoinquery(cursor)
 
     elif choice == 3:
-        windowFunction()
+        windowFunction(cursor)
 
     elif choice == 4:
-        metaData()
+        metaData(cursor)
 
     elif choice == 5:
-        scalarFuncfromLab()
+        scalarFuncfromLab(cursor)
         
     elif choice == 6:
-        tableFuncfromLab()
+        tableFuncfromLab(cursor)
 
     elif choice == 7:
-        storedFuncfromLab()
+        storedFuncfromLab(cursor)
         
     elif choice == 8:
-        systemFunc()
+        systemFunc(cursor)
 
     elif choice == 9:
-        createTable()
+        createTable(cursor)
 
     elif choice == 10:
-        insertInto()
-        
-choice = True
+        insertInto(cursor)
 
-while (choice):
-    choice = menu()
-    manager(choice)
+def openConnection():
+    try:
+        connection = psycopg2.connect(dbname='BMSTU', user='postgres', 
+                            password='monerocoinyota', host='localhost')
+        
+        print("Database connected\n")
+        return connection
+
+    except:
+        return None
+    
+    return cursor, connection
+
+def getCursor(connection):
+    cursor = connection.cursor()
+
+    return cursor
+
+def main():
+    try:
+        connection = openConnection()
+    except None:
+        print("Failed to connect\n")
+
+    if connection != None:        
+        cursor = getCursor(connection)     
+        choice = True
+
+        while (choice):
+            choice = menu()
+            manager(choice, cursor, connection)
+
+main()
 
 
 
