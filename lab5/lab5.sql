@@ -75,7 +75,8 @@ from
     from import, json_array_elements(doc) p
 ) imp;
 
-SELECT tbl.value::jsonb ? 'username' from tbl
+SELECT tbl.value::jsonb ? 'username' from tbl /* jsonb сохраняются в разобранном двоичном 
+                                                формате, что значительно ускоряет обработку*/
 
 -- **********************
   Изменить json документ
@@ -123,9 +124,9 @@ from
     from import, json_array_elements(doc) p
 ) imp;
 
-select json_each_text(tbl.value -> 'info') je
+select json_each_text(tbl.value -> 'info')
 from tbl
-order by je desc;
+
 
 
 
