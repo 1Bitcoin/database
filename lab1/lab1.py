@@ -21,7 +21,7 @@ def generateUsers():
     f = open('users.csv', 'w')
     for i in range(MAX_N):
         line = "{0},{1},{2},{3}\n".format(faker.name(), faker.email(), generatePassword(),
-                                                  faker.phone_number())
+                                                  faker.phone_number(), randint(1, 400))
         f.write(line)
     f.close()
 
